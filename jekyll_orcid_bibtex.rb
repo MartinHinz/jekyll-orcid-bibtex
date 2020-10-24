@@ -20,8 +20,8 @@ module Jekyll
       bibtex_entries = put_codes.map do |put_code|
         work_url = "https://pub.orcid.org/v2.1/#{orcid}/work/#{put_code}";
         response = JSON.load(open(work_url, 'Accept' => 'application/json'));
-        response['citation']['citation-value']
-      end
+        response['citation']['citation-value'] if defined? response['citation']['citation-value']
+      end .compact!
 
       File.open(File.expand_path(site.source+"/"+dir+"/"+orcid+".bib"), File::WRONLY|File::CREAT) { |file| file.write(bibtex_entries.join("\n")) }
 
